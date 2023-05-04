@@ -6,7 +6,9 @@ import il.cshaifasweng.OCSFMediatorExample.server.ocsf.ConnectionToClient;
 import il.cshaifasweng.OCSFMediatorExample.server.ocsf.SubscribedClient;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SimpleServer extends AbstractServer {
 	private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
@@ -48,18 +50,29 @@ public class SimpleServer extends AbstractServer {
 				client.sendToClient(message);
 			}
 			else if(request.startsWith("send Submitters IDs")){
-				//add code here to send submitters IDs to client
+				//add code here to send submitters names to client
+				message.setMessage("316378652");
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("send Submitters")){
 				//add code here to send submitters names to client
+				message.setMessage("Stav");
+				client.sendToClient(message);
 			}
 			else if (request.equals("what’s the time?")) {
 				//add code here to send the time to client
+				SimpleDateFormat myFormat = new SimpleDateFormat("HH:mm:ss");
+				message.setMessage(myFormat.format(new Date()));
+				client.sendToClient(message);
 			}
 			else if (request.startsWith("multiply")){
 				//add code here to multiply 2 numbers received in the message and send result back to client
 				//(use substring method as shown above)
 				//message format: "multiply n*m"
+				String[] nums = request.substring(9).split("[*]");
+				int result = Integer.parseInt(nums[0]) * Integer.parseInt(nums[1]);
+				message.setMessage(String.valueOf(result));
+				client.sendToClient(message);
 			}else{
 				//add code here to send received message to all clients.
 				//The string we received in the message is the message we will send back to all clients subscribed.
@@ -67,6 +80,7 @@ public class SimpleServer extends AbstractServer {
 					// message received: "Good morning"
 					// message sent: "Good morning"
 				//see code for changing submitters IDs for help
+				sendToAllClients(message);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
